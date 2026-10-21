@@ -1,9 +1,7 @@
 -- PRO2003 Work Requirement 3 | E-commerce Order Management System
--- Run against the ORIGINAL ecommerce_db, as postgres/owner.
--- Run sections separately. Do not rerun Requirement 1 schema: it drops tables.
--- Backup/restore is done with pg_dump/pg_restore, not SQL.
 
--- 1. SCHEMA REVIEW (read-only)
+
+-- 1. SCHEMA REVIEW
 SELECT table_name, column_name, data_type, is_nullable, column_default
 FROM information_schema.columns
 WHERE table_schema='public'
@@ -60,17 +58,6 @@ SELECT o.order_id, o.order_status, p.product_id, p.stock_quantity
 FROM public.orders o CROSS JOIN public.product p
 WHERE o.order_id=1 AND p.product_id=19;
 
--- OPTIONAL explicit ROLLBACK demo: run in ONE SQL session with autocommit disabled,
--- and inspect state before rollback. Do not execute blindly statement by statement
--- in DBeaver Auto mode (causes 'no transaction in progress').
--- BEGIN;
--- UPDATE public.product SET stock_quantity=stock_quantity-3
--- WHERE product_id=19 AND stock_quantity>=3;
--- UPDATE public.orders SET order_status='Processing'
--- WHERE order_id=1 AND order_status='Pending';
--- SELECT stock_quantity FROM public.product WHERE product_id=19;
--- SELECT order_status FROM public.orders WHERE order_id=1;
--- ROLLBACK;
 
 -- 4. RESTRICTED ROLE & LEAST PRIVILEGE (run as a privileged user)
 DO $$
