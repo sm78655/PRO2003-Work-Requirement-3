@@ -19,12 +19,25 @@ SELECT (SELECT COUNT(*) FROM customer) AS customers,
        (SELECT COUNT(*) FROM payment) AS payments;
 ```
 
-Observed restored row counts: **80 customers, 8 categories, 48 products, 160 orders, 320 order items, 128 payments (744 total)**. Screenshot: `WR3_09_Restore_Verification.png`. This confirms table existence and matching counts, but not a full byte-by-byte integrity comparison.
+## Restoration Verification
 
-**Command-line alternative** (PowerShell, adjust the actual path):
+After completing the restoration, I connected to
+ecommerce_db_restore and executed SQL COUNT queries
+against the six database tables.
 
-```powershell
-& "C:\Program Files\PostgreSQL\18\bin\pg_restore.exe" -h localhost -p 5432 -U postgres -d ecommerce_db_restore --no-owner --no-privileges "C:\path\to\your-actual-backup.backup"
-```
+The restored database contained:
 
-Do not place passwords inside commands or commit real credentials or backup copies containing sensitive information.
+- customer: 80 records
+- category: 8 records
+- product: 48 records
+- orders: 160 records
+- order_item: 320 records
+- payment: 128 records
+
+Total: 744 records.
+
+These counts matched the original database and confirmed
+that the expected records were present after restoration.
+
+This verification checks the number of records but does
+not establish complete row-by-row data integrity.
